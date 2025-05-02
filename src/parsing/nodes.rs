@@ -1,59 +1,49 @@
 use crate::lexing::token::TokenKind;
 
-// BUG: fix this lol
-
+// Recursive rule type: either a token or another node
 pub enum ProductionRule {
     Token(TokenKind),
     Node(Box<dyn Node>),
 }
 
-
+// Trait that all AST-like nodes implement
 pub trait Node {
-    //production_rules: Vec<ProductionRule>,
     fn get_production_rules(&self) -> Vec<ProductionRule>;
-    // Returns an iterator for Node 
-    fn iter_rules(&self) -> NodeIter<Self> 
-    where 
-        Self : Sized,
-    {
-        NodeIter::new(self)
+
+    fn iter_rules(&self) -> NodeIter {
+        NodeIter::new(self.get_production_rules())
     }
 }
 
-
-// Wrapper Struct to implement iterator on any strcut that implments node
-pub struct NodeIter <'a, T: Node> {
-    node: &'a T,
-    rules: Vec<ProductionRule>,
-    index: usize,
+// Iterator that walks through nested Node structures
+pub struct NodeIter {
+    stack: Vec<ProductionRule>,
 }
 
-impl <'a, T:Node> NodeIter<'a,T> {
-    pub fn new(node: &'a T) -> Self {
-        Self {node , rules : node.get_production_rules(), index : 0}
+impl NodeIter {
+    pub fn new(rules : Vec<ProductionRule>) -> Self {
+        Self {
+            stack: rules,
+        }
     }
 }
 
-impl<'a, T:Node> Iterator for NodeIter<'a, T > {
-    // This will return a copy but since it's just an enum it shouldn't be an issue 
+impl Iterator for NodeIter {
     type Item = TokenKind;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.rules.len() == 0 {
-            return None;
-        }
-        let rule = &self.rules[0];
-
-        match rule {
-            ProductionRule::Token(t) => {
-                self.rules.pop();
-                return Some(*t)
-            },
-            ProductionRule::Node(n) => {
-
+        while let Some(rule) = self.stack.pop() {
+            match rule {
+                ProductionRule::Token(t) => return Some(t),
+                ProductionRule::Node(n) => {
+                    let mut inner_iter = n.iter_rules().collect::<Vec<_>>();
+                    inner_iter.reverse(); // maintain order for the stack
+                    for token in inner_iter {
+                        self.stack.push(ProductionRule::Token(token));
+                    }
+                }
             }
         }
-
         None
     }
 }

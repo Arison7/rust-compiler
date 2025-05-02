@@ -51,7 +51,13 @@ impl Node for Program {
     
 }
 
-fn parse() {
+pub fn parse() {
+    let p = Program {};
+
+    for rule in p.iter_rules(){
+        println!("{:?} ", rule)
+    }
+
 
 
 }
