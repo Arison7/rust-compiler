@@ -10,7 +10,7 @@ const TEST: &str = "int main(){
     return 2;
 }";
 
-pub fn lex() {
+pub fn lex()  -> Vec<Token>{
     let mut tokens: Vec<Token> = vec![]; 
     let options = Token::get_options();
 
@@ -18,9 +18,7 @@ pub fn lex() {
 
     rec_lexing(&mut tokens, source,&options);
 
-    for t in tokens {
-        println!("token: {:?}", t);
-    }
+    tokens
 }
 
 fn rec_lexing(

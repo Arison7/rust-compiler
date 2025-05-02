@@ -1,32 +1,27 @@
-use crate::lexing::token::TokenKind;
-
-// Recursive rule type: either a token or another node
-pub enum ProductionRule {
-    Token(TokenKind),
-    Node(Box<dyn Node>),
-}
+use crate::lexing::token::Token;
 
 // Trait that all AST-like nodes implement
 pub trait Node {
-    fn get_production_rules(&self) -> Vec<ProductionRule>;
-
+    fn parse(&mut self,  tokens :&mut Vec<Token> ) -> Option<()>;
+    /*
     fn iter_rules(&self) -> NodeIter {
         NodeIter::new(self.get_production_rules())
     }
+    */
 }
 
+/*
 // Iterator that walks through nested Node structures
 pub struct NodeIter {
     stack: Vec<ProductionRule>,
 }
 
 impl NodeIter {
-    pub fn new(rules : Vec<ProductionRule>) -> Self {
-        Self {
-            stack: rules,
-        }
+    pub fn new(rules: Vec<ProductionRule>) -> Self {
+        Self { stack: rules }
     }
 }
+
 
 impl Iterator for NodeIter {
     type Item = TokenKind;
@@ -47,4 +42,4 @@ impl Iterator for NodeIter {
         None
     }
 }
-
+*/

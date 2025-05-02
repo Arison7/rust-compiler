@@ -2,6 +2,6 @@ mod lexing;
 mod parsing;
 
 fn main() {
-    lexing::lex();
+    let tokens = lexing::lex();
     parsing::parse();
 }

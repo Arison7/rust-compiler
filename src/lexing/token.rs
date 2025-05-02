@@ -1,6 +1,6 @@
 use core::panic;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum Token {
     // Keywords
     If,
@@ -8,7 +8,7 @@ pub enum Token {
     Int,
 
     // Literals
-    IntegerLiteral(i32),
+    IntegerLiteral(usize),
     StringLiteral(String),
 
     // Identifiers
@@ -35,7 +35,7 @@ pub enum Token {
     Err(String),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TokenKind {
     // Keywords
     If,
