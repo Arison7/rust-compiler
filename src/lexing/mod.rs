@@ -1,32 +1,32 @@
-use std::vec;
+use queues::*;
 
 use regex::Regex;
+use token::Token; 
+use std::{fs::File, io::Read};
 
 pub mod token;
 
-use token::Token; 
 
-const TEST: &str = "int main(){
-    return 2;
-}";
-
-pub fn lex()  -> Vec<Token>{
-    let mut tokens: Vec<Token> = vec![]; 
+pub fn lex(mut source : File )  -> Queue<Token>{
+    let mut tokens: Queue<Token> = queue![]; 
     let options = Token::get_options();
 
-    let mut source = &TEST;
+    let mut content : String = String::new();
 
-    rec_lexing(&mut tokens, source,&options);
+    source.read_to_string(&mut content).expect("Couldn't read file");
+
+
+    rec_lexing(&mut tokens,&content ,&options);
 
     tokens
 }
 
 fn rec_lexing(
-    tokens: &mut Vec<Token>,
+    tokens: &mut Queue<Token>,
     mut source: & str,
     options: &Vec<&str>,
 ) {
-    if source.len() <= 0 {
+    if source.is_empty() {
         return
     }
     for opt in options {
@@ -35,7 +35,7 @@ fn rec_lexing(
         let re = Regex::new(pattern).unwrap();
 
         if let Some(mat) = re.find(source) {
-            tokens.push(Token::get_token(opt, mat.as_str()));
+            tokens.add(Token::get_token(opt, mat.as_str())).unwrap();
             source = & source[mat.len()..];
             rec_lexing( tokens, source, options);
             return;
@@ -43,7 +43,7 @@ fn rec_lexing(
     }
     let char = &source[..1];
     if char != "\n" && char != r" "{
-        tokens.push(Token::get_token("", &source[..1]));
+        tokens.add(Token::get_token("", &source[..1])).unwrap();
     }
     rec_lexing(tokens, &source[1..], options);
 

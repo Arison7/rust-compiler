@@ -3,6 +3,10 @@ name = "rust-compiler"
 version = "0.1.0"
 edition = "2021"
 
+[profile.dev]
+debug= true
+
 [dependencies]
+queues="1.0.2"
 
 regex ="1"

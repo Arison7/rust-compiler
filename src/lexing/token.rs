@@ -127,7 +127,7 @@ impl Token {
             "LessThan" => Token::LessThan,
 
             // Literals and Identifiers
-            "IntegerLiteral" => Token::IntegerLiteral(value.parse::<i32>().unwrap()),
+            "IntegerLiteral" => Token::IntegerLiteral(value.parse::<usize>().unwrap()),
             "StringLiteral" => Token::StringLiteral(value.to_string()),
             "Identifier" => Token::Identifier(value.to_string()),
 
