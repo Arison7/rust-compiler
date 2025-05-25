@@ -38,7 +38,7 @@ pub enum Token {
     Err(String),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum TokenKind {
     // Keywords
     If,
