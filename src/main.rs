@@ -21,6 +21,8 @@ fn main() {
     if let Err(res) = result{
         println!("error: {}", res);
     }
+
+
     if let Ok(program) = result {
         let output = File::create(format!("{}.s",filename)).expect("failed to create file");
         program.generate_assembly(output);

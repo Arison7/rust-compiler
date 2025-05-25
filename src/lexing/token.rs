@@ -17,6 +17,9 @@ pub enum Token {
     // Operators
     Plus,
     Assign,
+    Negation,
+    BitwiseComplement,
+    LogicalNegation,
 
     // Punctuation
     Semicolon,
@@ -53,6 +56,9 @@ pub enum TokenKind {
     // Operators
     Plus,
     Assign,
+    Negation,
+    BitwiseComplement,
+    LogicalNegation,
 
     // Punctuation
     Semicolon,
@@ -87,6 +93,9 @@ impl Token {
             // Operators
             Token::Plus => TokenKind::Plus,
             Token::Assign => TokenKind::Assign,
+            Token::Negation => TokenKind::Negation,
+            Token::BitwiseComplement => TokenKind::BitwiseComplement,
+            Token::LogicalNegation => TokenKind::LogicalNegation,
 
             // Punctuation
             Token::Semicolon => TokenKind::Semicolon,
@@ -114,6 +123,9 @@ impl Token {
             // Operators
             "Plus" => Token::Plus,
             "Assign" => Token::Assign,
+            "Negation" => Token::Negation,
+            "BitwiseComplement" =>Token::BitwiseComplement,
+            "LogicalNegation" =>Token::LogicalNegation,
 
             // Punctuation
             "Semicolon" => Token::Semicolon,
@@ -145,6 +157,9 @@ impl Token {
             "Semicolon" => r"^;",
             "Int" => r"^int",
             "ReturnKeyword" => r"^return",
+            "Negation" => r"^-",
+            "BitwiseComplement" => r"^~",
+            "LogicalNegation" => r"^!",
             "Identifier" => r"^[a-zA-Z]\w*",
             "IntegerLiteral" => r"^[0-9]+",
             _ => panic!("Non existing token passed"),
@@ -162,6 +177,9 @@ impl Token {
             "ReturnKeyword",
             "Identifier",
             "IntegerLiteral",
+            "Negation",
+            "BitwiseComplement",
+            "LogicalNegation",
         ]
     }
 }
