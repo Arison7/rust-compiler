@@ -1,5 +1,5 @@
 pub mod node;
-mod rule;
+pub mod rule;
 
 use crate::lexing::token::Token;
 use node::*;

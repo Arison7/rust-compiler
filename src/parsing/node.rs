@@ -70,7 +70,7 @@ pub enum AstNode {
     Function,
 }
 
-#[derive(Debug)]
+#[derive(Debug,PartialEq, Eq, Clone)]
 pub enum AstNodeKind {
     Program,
     Function,

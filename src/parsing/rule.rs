@@ -1,8 +1,17 @@
+use std::option;
+
 use crate::lexing::token::*;
 use crate::parsing::node::*;
 use queues::*;
 
-#[derive(Debug)]
+
+
+
+
+
+
+
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub enum RuleType {
     Token(TokenKind),
     Node(AstNodeKind),
@@ -40,6 +49,78 @@ impl Rules {
                 let ast_node = kind.get_type();
                 Ok(Some(Node::new(ast_node)))
             }
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct RuleTree {
+    pub ruletype: RuleType,
+    pub children: Vec<RuleTree>,
+}
+
+impl RuleTree {
+    pub fn new(ruletype: RuleType) -> Self {
+        Self {
+            ruletype,
+            children: vec![],
+        }
+    }
+
+    pub fn new_from_path(rule_path: &[Rules]) -> Self {
+        if rule_path.is_empty() {
+            return RuleTree::new(RuleType::Token(TokenKind::Err));
+        }
+
+        let root = RuleTree::new(rule_path[0].rule.clone());
+
+        let mut tree = root;
+        tree.add_rule_path(rule_path); // pass the full path including the root
+
+        tree
+}
+
+    pub fn add_rule_path(&mut self, rule_path: &[Rules]) {
+        if rule_path.is_empty() {
+            return;
+        }
+
+        let first = &rule_path[0];
+
+        // Only proceed if current node matches the rule
+        if self.ruletype != first.rule {
+            println!("Mismatched node: expected {:?}, got {:?}", self.ruletype, first.rule);
+            return;
+        }
+
+        // If this is the last rule in the path, we're done
+        if rule_path.len() == 1 {
+            return;
+        }
+
+        let next_rule = &rule_path[1];
+
+        // Look for a matching child
+        if let Some(existing_child) = self
+            .children
+            .iter_mut()
+            .find(|child| child.ruletype == next_rule.rule)
+        {
+            existing_child.add_rule_path(&rule_path[1..]);
+        } else {
+            let mut new_child = RuleTree::new(next_rule.rule.clone());
+            new_child.add_rule_path(&rule_path[1..]);
+            self.children.push(new_child);
+        }
+    }
+
+
+    pub fn pretty_print(&self, indent: usize) {
+        let indent_str = "  ".repeat(indent);
+        println!("{}- {:?}", indent_str, self.ruletype);
+
+        for child in &self.children {
+            child.pretty_print(indent + 1);
         }
     }
 }
