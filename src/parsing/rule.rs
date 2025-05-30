@@ -1,4 +1,3 @@
-use std::option;
 
 use crate::lexing::token::*;
 use crate::parsing::node::*;
@@ -135,10 +134,10 @@ pub static AST_RULES: Lazy<HashMap<AstNodeKind, RuleTree>> = Lazy::new(|| {
 
     let mut rule_map: HashMap<AstNodeKind, RuleTree> = HashMap::new();
 
-    println!("called");
+    //println!("called");
 
     // unOp: three unary operator possibilities
-    let unOp: [Vec<RuleType>; 3] = [
+    let un_op: [Vec<RuleType>; 3] = [
         vec![Token(Negation)],
         vec![Token(BitwiseComplement)],
         vec![Token(LogicalNegation)],
@@ -166,7 +165,7 @@ pub static AST_RULES: Lazy<HashMap<AstNodeKind, RuleTree>> = Lazy::new(|| {
 
     // Combine all into one list of tuples: (AstNodeKind, &[Vec<RuleType>])
     let all_rules: &[(AstNodeKind, &[Vec<RuleType>])] = &[
-        (UnOp, &unOp),
+        (UnOp, &un_op),
         (Exp, &exp),
         (Statement, &statement),
         (Function, &function),

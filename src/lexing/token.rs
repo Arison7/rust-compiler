@@ -156,7 +156,7 @@ impl Token {
             "CloseParen" => r"^\)",
             "Semicolon" => r"^;",
             "Int" => r"^int",
-            "ReturnKeyword" => r"^return",
+            "ReturnKeyword" => r"^return ",
             "Negation" => r"^-",
             "BitwiseComplement" => r"^~",
             "LogicalNegation" => r"^!",
