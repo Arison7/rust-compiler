@@ -6,10 +6,14 @@ use std::fs::File;
 
 
 fn main() {
-    let (f, filename) = file_processing::get_file();
+    let a = 5; 
+
+    let (f, filename) =  file_processing::get_file();
     
 
     let mut tokens = lexing::lex(f);
+
+    let b = dbg!(&tokens);
 
 
     
